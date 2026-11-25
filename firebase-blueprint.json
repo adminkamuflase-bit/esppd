@@ -1,0 +1,244 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Profil pengguna terautentikasi pengelola SPPD MTsN 6 Ciamis",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID pengguna",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Alamat email Google terverifikasi",
+          "maxLength": 160
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Nama tampilan pengguna",
+          "maxLength": 120
+        },
+        "role": {
+          "type": "string",
+          "enum": ["operator"],
+          "description": "Peran pengguna pada workspace"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "email", "displayName", "role", "createdAt", "updatedAt"]
+    },
+    "Workspace": {
+      "title": "Workspace",
+      "description": "Ruang kerja administrasi SPPD milik operator madrasah",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "namaMadrasah": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["ownerId", "namaMadrasah", "createdAt", "updatedAt"]
+    },
+    "InstansiSettings": {
+      "title": "InstansiSettings",
+      "description": "Konfigurasi kop surat resmi, pejabat penandatangan, dan logo MTsN 6 Ciamis",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "kementerian": { "type": "string", "maxLength": 150 },
+        "kanwil": { "type": "string", "maxLength": 150 },
+        "kantorKabupaten": { "type": "string", "maxLength": 150 },
+        "namaMadrasah": { "type": "string", "maxLength": 120 },
+        "alamatMadrasah": { "type": "string", "maxLength": 300 },
+        "telepon": { "type": "string", "maxLength": 40 },
+        "email": { "type": "string", "maxLength": 120 },
+        "website": { "type": "string", "maxLength": 120 },
+        "kodePos": { "type": "string", "maxLength": 16 },
+        "tempatKedudukan": { "type": "string", "maxLength": 100 },
+        "kodeSatker": { "type": "string", "maxLength": 40 },
+        "tahunAnggaran": { "type": "string", "maxLength": 10 },
+        "kepalaMadrasahNama": { "type": "string", "maxLength": 120 },
+        "kepalaMadrasahNip": { "type": "string", "maxLength": 40 },
+        "ppkNama": { "type": "string", "maxLength": 120 },
+        "ppkNip": { "type": "string", "maxLength": 40 },
+        "bendaharaNama": { "type": "string", "maxLength": 120 },
+        "bendaharaNip": { "type": "string", "maxLength": 40 },
+        "awalanNomorSurat": { "type": "string", "maxLength": 40 },
+        "kodeKlasifikasiSurat": { "type": "string", "maxLength": 40 },
+        "logoDataUrl": { "type": "string", "maxLength": 400000 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "ownerId",
+        "kementerian",
+        "kanwil",
+        "kantorKabupaten",
+        "namaMadrasah",
+        "alamatMadrasah",
+        "telepon",
+        "email",
+        "website",
+        "kodePos",
+        "tempatKedudukan",
+        "kodeSatker",
+        "tahunAnggaran",
+        "kepalaMadrasahNama",
+        "kepalaMadrasahNip",
+        "ppkNama",
+        "ppkNip",
+        "bendaharaNama",
+        "bendaharaNip",
+        "awalanNomorSurat",
+        "kodeKlasifikasiSurat",
+        "logoDataUrl",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Pegawai": {
+      "title": "Pegawai",
+      "description": "Master data guru dan tenaga kependidikan pelaksana perjalanan dinas",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "nama": { "type": "string", "minLength": 1, "maxLength": 150 },
+        "nip": { "type": "string", "maxLength": 40 },
+        "pangkatGolongan": { "type": "string", "maxLength": 80 },
+        "jabatan": { "type": "string", "minLength": 1, "maxLength": 150 },
+        "tingkatBiaya": { "type": "string", "enum": ["A", "B", "C", "D"] },
+        "statusKepegawaian": { "type": "string", "enum": ["PNS", "PPPK", "Non-ASN"] },
+        "unitKerja": { "type": "string", "maxLength": 150 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "nama",
+        "nip",
+        "pangkatGolongan",
+        "jabatan",
+        "tingkatBiaya",
+        "statusKepegawaian",
+        "unitKerja",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "SppdRecord": {
+      "title": "SppdRecord",
+      "description": "Dokumen Surat Perintah Perjalanan Dinas dan Surat Tugas",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "nomorSppd": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "nomorSuratTugas": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "tanggalSurat": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$", "maxLength": 10 },
+        "pegawaiId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "pegawaiNama": { "type": "string", "minLength": 1, "maxLength": 150 },
+        "pegawaiNip": { "type": "string", "maxLength": 40 },
+        "pegawaiPangkat": { "type": "string", "maxLength": 80 },
+        "pegawaiJabatan": { "type": "string", "maxLength": 150 },
+        "tingkatBiaya": { "type": "string", "enum": ["A", "B", "C", "D"] },
+        "maksudPerjalanan": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "dasarSurat": { "type": "string", "maxLength": 500 },
+        "alatAngkut": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "tempatBerangkat": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "tempatTujuan": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "instansiTujuan": { "type": "string", "maxLength": 200 },
+        "tanggalBerangkat": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$", "maxLength": 10 },
+        "tanggalKembali": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$", "maxLength": 10 },
+        "lamaHari": { "type": "integer" },
+        "pengikut": { "type": "array" },
+        "sumberDana": { "type": "string", "maxLength": 200 },
+        "mataAnggaran": { "type": "string", "maxLength": 100 },
+        "keteranganLain": { "type": "string", "maxLength": 500 },
+        "pejabatMengetahuiTujuan": { "type": "string", "maxLength": 200 },
+        "status": { "type": "string", "enum": ["Draft", "Disetujui", "Selesai"] },
+        "laporanRingkas": { "type": "string", "maxLength": 2000 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "nomorSppd",
+        "nomorSuratTugas",
+        "tanggalSurat",
+        "pegawaiId",
+        "pegawaiNama",
+        "pegawaiNip",
+        "pegawaiPangkat",
+        "pegawaiJabatan",
+        "tingkatBiaya",
+        "maksudPerjalanan",
+        "dasarSurat",
+        "alatAngkut",
+        "tempatBerangkat",
+        "tempatTujuan",
+        "instansiTujuan",
+        "tanggalBerangkat",
+        "tanggalKembali",
+        "lamaHari",
+        "pengikut",
+        "sumberDana",
+        "mataAnggaran",
+        "keteranganLain",
+        "pejabatMengetahuiTujuan",
+        "status",
+        "laporanRingkas",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Profil pengguna pengelola SPPD yang terisolasi per pemilik akun"
+    },
+    "/workspaces/{workspaceId}": {
+      "schema": { "$ref": "#/entities/Workspace" },
+      "description": "Dokumen induk ruang kerja SPPD madrasah untuk verifikasi kepemilikan relasional"
+    },
+    "/workspaces/{workspaceId}/settings/{settingId}": {
+      "schema": { "$ref": "#/entities/InstansiSettings" },
+      "description": "Pengaturan instansi, kop surat, pejabat, dan logo madrasah"
+    },
+    "/workspaces/{workspaceId}/pegawai/{pegawaiId}": {
+      "schema": { "$ref": "#/entities/Pegawai" },
+      "description": "Daftar pegawai MTsN 6 Ciamis pada ruang kerja terkait"
+    },
+    "/workspaces/{workspaceId}/sppd/{sppdId}": {
+      "schema": { "$ref": "#/entities/SppdRecord" },
+      "description": "Catatan SPPD dan Surat Tugas MTsN 6 Ciamis pada ruang kerja terkait"
+    }
+  }
+}

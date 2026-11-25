@@ -1,10 +1,11 @@
 import React from 'react';
-import { Printer, Pencil, ArrowRight, CheckCircle2, Clock, FileCheck2 } from 'lucide-react';
+import { Printer, Pencil, ArrowRight, CheckCircle2, Clock, FileCheck2, FileSpreadsheet } from 'lucide-react';
 import type { SppdRecord, SppdStatus } from '../types/sppd';
 import {
   computeDashboardSummary,
   formatTanggalIndonesia,
 } from '../utils/sppdLogic';
+import { exportSppdToXlsx } from '../utils/sppdExport';
 
 interface DashboardViewProps {
   records: SppdRecord[];
@@ -113,14 +114,26 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               Daftar surat perintah perjalanan dinas dan surat tugas MTsN 6 Ciamis
             </p>
           </div>
-          <button
-            type="button"
-            onClick={onViewAllSppd}
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-800 hover:text-emerald-900 whitespace-nowrap shrink-0"
-          >
-            <span>Lihat Semua SPPD</span>
-            <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </button>
+          <div className="flex flex-wrap items-center gap-3">
+            {records.length > 0 && (
+              <button
+                type="button"
+                onClick={() => exportSppdToXlsx(records)}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 whitespace-nowrap shrink-0"
+              >
+                <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-700" aria-hidden="true" />
+                <span>Ekspor Excel (.xlsx)</span>
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={onViewAllSppd}
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-800 hover:text-emerald-900 whitespace-nowrap shrink-0"
+            >
+              <span>Lihat Semua SPPD</span>
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </button>
+          </div>
         </div>
 
         {recentRecords.length === 0 ? (

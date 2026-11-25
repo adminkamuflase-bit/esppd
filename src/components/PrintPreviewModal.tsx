@@ -374,7 +374,7 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({
                       <p className="pl-4">(Tempat Kedudukan)</p>
                       <p className="pl-4">Ke : {record.tempatTujuan}</p>
                       <p className="pl-4">Pada Tanggal : {formatTanggalIndonesia(record.tanggalBerangkat)}</p>
-                      <p className="mt-2 font-semibold">Kepala {settings.namaMadrasah} / PPK,</p>
+                      <p className="mt-2 font-semibold">Kepala {settings.namaMadrasah},</p>
                       <div className="h-12" />
                       <p className="font-bold underline">{settings.kepalaMadrasahNama}</p>
                       <p>NIP. {settings.kepalaMadrasahNip}</p>

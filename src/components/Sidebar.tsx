@@ -5,6 +5,8 @@ import {
   Users,
   Settings,
   X,
+  LogIn,
+  LogOut,
 } from 'lucide-react';
 import { KemenagCrest } from './KemenagCrest';
 
@@ -18,6 +20,9 @@ interface SidebarProps {
   logoDataUrl?: string;
   mobileOpen: boolean;
   onCloseMobile: () => void;
+  userLabel?: string | null;
+  onSignIn: () => void;
+  onSignOut: () => void;
 }
 
 const NAV_ITEMS: Array<{
@@ -39,6 +44,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
   logoDataUrl,
   mobileOpen,
   onCloseMobile,
+  userLabel,
+  onSignIn,
+  onSignOut,
 }) => {
   const navContent = (
     <div className="flex h-full flex-col justify-between bg-white border-r border-slate-200">
@@ -105,11 +113,43 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </nav>
       </div>
 
-      <div className="border-t border-slate-200 px-5 py-4">
-        <p className="text-xs font-medium text-slate-700">Kementerian Agama RI</p>
-        <p className="mt-0.5 text-xs text-slate-500">
-          Kabupaten Ciamis · Jawa Barat
-        </p>
+      <div className="border-t border-slate-200 px-4 py-4 space-y-3">
+        <div className="md:hidden">
+          {userLabel ? (
+            <div className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-700">
+              <span className="truncate font-medium">{userLabel}</span>
+              <button
+                type="button"
+                onClick={() => {
+                  onSignOut();
+                  onCloseMobile();
+                }}
+                className="inline-flex items-center gap-1 text-slate-600 hover:text-slate-900 shrink-0"
+              >
+                <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
+                <span>Keluar</span>
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                onSignIn();
+                onCloseMobile();
+              }}
+              className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50"
+            >
+              <LogIn className="h-4 w-4 text-emerald-700" aria-hidden="true" />
+              <span>Masuk Google</span>
+            </button>
+          )}
+        </div>
+        <div className="px-1">
+          <p className="text-xs font-medium text-slate-700">Kementerian Agama RI</p>
+          <p className="mt-0.5 text-xs text-slate-500">
+            Kabupaten Ciamis · Jawa Barat
+          </p>
+        </div>
       </div>
     </div>
   );

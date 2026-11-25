@@ -278,7 +278,7 @@ function renderSpdPage2(doc: jsPDF, record: SppdRecord, settings: InstansiSettin
   doc.text(`Ke : ${record.tempatTujuan}`, rx + 4, y + 14);
   doc.text(`Pada Tanggal : ${formatTanggalIndonesia(record.tanggalBerangkat)}`, rx + 4, y + 18.5);
   doc.setFont('times', 'bold');
-  doc.text(`Kepala ${settings.namaMadrasah} / PPK,`, rx, y + 24);
+  doc.text(`Kepala ${settings.namaMadrasah},`, rx, y + 24);
   doc.text(settings.kepalaMadrasahNama, rx, y + 37);
   doc.setFont('times', 'normal');
   doc.text(`NIP. ${settings.kepalaMadrasahNip}`, rx, y + 41.5);

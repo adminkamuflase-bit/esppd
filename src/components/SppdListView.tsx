@@ -1,10 +1,11 @@
 import React, { useMemo, useState } from 'react';
-import { Printer, Pencil, Trash2, Search, Plus } from 'lucide-react';
+import { Printer, Pencil, Trash2, Search, Plus, FileSpreadsheet, Download } from 'lucide-react';
 import type { SppdRecord, SppdStatus } from '../types/sppd';
 import {
   filterSppdRecords,
   formatTanggalIndonesia,
 } from '../utils/sppdLogic';
+import { exportSppdToCsv, exportSppdToXlsx } from '../utils/sppdExport';
 import { StatusLabel } from './DashboardView';
 
 interface SppdListViewProps {
@@ -29,6 +30,7 @@ export const SppdListView: React.FC<SppdListViewProps> = ({
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<SppdStatus | 'Semua'>('Semua');
   const [monthFilter, setMonthFilter] = useState<string>('Semua');
+  const [exportNotice, setExportNotice] = useState<string | null>(null);
 
   const availableMonths = useMemo(() => {
     const months = new Set<string>();
@@ -49,13 +51,13 @@ export const SppdListView: React.FC<SppdListViewProps> = ({
     <div className="space-y-4">
       <div className="rounded-xl border border-slate-200 bg-white">
         {/* Toolbar */}
-        <div className="flex flex-col gap-4 border-b border-slate-200 p-5 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-col gap-3 border-b border-slate-200 p-5 xl:flex-row xl:items-center xl:justify-between">
+          <div className="flex flex-wrap items-center gap-2">
             {/* Segmented status filter */}
             <div
               role="group"
               aria-label="Filter status SPPD"
-              className="inline-flex items-center gap-1 rounded-lg bg-slate-100 p-1"
+              className="inline-flex items-center gap-0.5 rounded-lg bg-slate-100 p-1"
             >
               {STATUS_TABS.map((tab) => {
                 const active = statusFilter === tab;
@@ -64,7 +66,7 @@ export const SppdListView: React.FC<SppdListViewProps> = ({
                     key={tab}
                     type="button"
                     onClick={() => setStatusFilter(tab)}
-                    className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap shrink-0 ${
+                    className={`rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors whitespace-nowrap shrink-0 ${
                       active
                         ? 'bg-white text-slate-900 shadow-xs'
                         : 'text-slate-600 hover:text-slate-900'
@@ -77,7 +79,7 @@ export const SppdListView: React.FC<SppdListViewProps> = ({
             </div>
 
             {/* Month select */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center">
               <label htmlFor="sppd-month-filter" className="sr-only">
                 Filter Bulan
               </label>
@@ -85,7 +87,7 @@ export const SppdListView: React.FC<SppdListViewProps> = ({
                 id="sppd-month-filter"
                 value={monthFilter}
                 onChange={(e) => setMonthFilter(e.target.value)}
-                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 focus:border-emerald-700 focus:outline-none"
+                className="rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs font-medium text-slate-700 focus:border-emerald-700 focus:outline-none"
               >
                 <option value="Semua">Semua Bulan</option>
                 {availableMonths.map((ym) => (
@@ -97,8 +99,8 @@ export const SppdListView: React.FC<SppdListViewProps> = ({
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="relative flex-1 sm:w-72 sm:flex-initial">
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="relative flex-1 sm:w-48 sm:flex-initial">
               <Search
                 className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
                 aria-hidden="true"
@@ -111,10 +113,36 @@ export const SppdListView: React.FC<SppdListViewProps> = ({
                 type="search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Cari nomor, pegawai, tujuan..."
+                placeholder="Cari nomor, pegawai..."
                 className="w-full rounded-lg border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-emerald-700 focus:outline-none"
               />
             </div>
+
+            <button
+              type="button"
+              disabled={filtered.length === 0}
+              onClick={() => {
+                const file = exportSppdToXlsx(filtered);
+                setExportNotice(`Data berhasil diekspor ke Excel: ${file} (${filtered.length} baris)`);
+              }}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-50 whitespace-nowrap shrink-0"
+            >
+              <FileSpreadsheet className="h-4 w-4 text-emerald-700" aria-hidden="true" />
+              <span>Ekspor Excel (.xlsx)</span>
+            </button>
+
+            <button
+              type="button"
+              disabled={filtered.length === 0}
+              onClick={() => {
+                const file = exportSppdToCsv(filtered);
+                setExportNotice(`Data berhasil diekspor ke CSV: ${file} (${filtered.length} baris)`);
+              }}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-50 whitespace-nowrap shrink-0"
+            >
+              <Download className="h-3.5 w-3.5 text-slate-600" aria-hidden="true" />
+              <span>CSV</span>
+            </button>
 
             <button
               type="button"
@@ -126,6 +154,15 @@ export const SppdListView: React.FC<SppdListViewProps> = ({
             </button>
           </div>
         </div>
+
+        {exportNotice && (
+          <div
+            role="status"
+            className="border-b border-emerald-200 bg-emerald-50 px-5 py-2.5 text-xs text-emerald-800"
+          >
+            {exportNotice}
+          </div>
+        )}
 
         {/* Table */}
         {filtered.length === 0 ? (
